@@ -1,7 +1,23 @@
 from flask import Flask, render_template
 import os
+import logging
+from flask import Flask, request
+
 
 app = Flask(__name__)
+
+
+
+
+# Configure logging to show messages in the terminal
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+
+@app.before_request
+def log_request():
+    logging.info(f"Incoming request: {request.method} {request.path} from {request.remote_addr}")
+
+
+
 
 @app.route('/')
 def index():
