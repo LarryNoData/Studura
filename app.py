@@ -10,11 +10,12 @@ app = Flask(__name__)
 
 
 # Configure logging to show messages in the terminal
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(filename='requests.log', level=logging.INFO, format="%(asctime)s - %(message)s")
 
 @app.before_request
 def log_request():
-    logging.info(f"Incoming request: {request.method} {request.path} from {request.remote_addr}")
+    logging.info(f"Request: {request.method} {request.path} from {request.remote_addr}")
+
 
 
 
