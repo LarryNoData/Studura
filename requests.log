@@ -1,0 +1,15 @@
+2025-06-13 16:50:20,664 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:50:20,664 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:51:28,178 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:51:28,179 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:52:42,047 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:52:42,049 - [33mPress CTRL+C to quit[0m
