@@ -31,3 +31,38 @@
 2025-06-13 16:57:04,953 -  * Restarting with stat
 2025-06-13 16:57:06,191 -  * Debugger is active!
 2025-06-13 16:57:06,197 -  * Debugger PIN: 796-554-518
+2025-06-13 20:29:54,134 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2025-06-13 20:29:54,134 - [33mPress CTRL+C to quit[0m
+2025-06-13 20:36:39,590 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-06-13 20:36:39,591 - [33mPress CTRL+C to quit[0m
+2025-06-13 20:37:14,437 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2025-06-13 20:37:14,438 - [33mPress CTRL+C to quit[0m
+2025-06-13 20:37:51,788 - Request: GET / from 127.0.0.1
+2025-06-13 20:37:51,963 - 127.0.0.1 - - [13/Jun/2025 20:37:51] "GET / HTTP/1.1" 200 -
+2025-06-13 20:37:52,179 - Request: GET /static/style.css from 127.0.0.1
+2025-06-13 20:37:52,435 - 127.0.0.1 - - [13/Jun/2025 20:37:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-06-13 20:37:52,496 - Request: GET /favicon.ico from 127.0.0.1
+2025-06-13 20:37:52,498 - 127.0.0.1 - - [13/Jun/2025 20:37:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-13 20:37:53,964 - Request: GET /about from 127.0.0.1
+2025-06-13 20:37:54,016 - 127.0.0.1 - - [13/Jun/2025 20:37:54] "GET /about HTTP/1.1" 200 -
+2025-06-13 20:37:54,184 - Request: GET /static/style.css from 127.0.0.1
+2025-06-13 20:37:54,186 - 127.0.0.1 - - [13/Jun/2025 20:37:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-06-13 20:37:55,240 - Request: GET / from 127.0.0.1
+2025-06-13 20:37:55,243 - 127.0.0.1 - - [13/Jun/2025 20:37:55] "GET / HTTP/1.1" 200 -
+2025-06-13 20:37:55,414 - Request: GET /static/style.css from 127.0.0.1
+2025-06-13 20:37:55,416 - 127.0.0.1 - - [13/Jun/2025 20:37:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-06-13 20:37:56,021 - Request: GET /contact from 127.0.0.1
+2025-06-13 20:37:56,088 - 127.0.0.1 - - [13/Jun/2025 20:37:56] "GET /contact HTTP/1.1" 200 -
+2025-06-13 20:37:56,157 - Request: GET /static/style.css from 127.0.0.1
+2025-06-13 20:37:56,159 - 127.0.0.1 - - [13/Jun/2025 20:37:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-06-13 20:37:56,974 - Request: GET / from 127.0.0.1
+2025-06-13 20:37:56,979 - 127.0.0.1 - - [13/Jun/2025 20:37:56] "GET / HTTP/1.1" 200 -
+2025-06-13 20:37:57,105 - Request: GET /static/style.css from 127.0.0.1
+2025-06-13 20:37:57,106 - 127.0.0.1 - - [13/Jun/2025 20:37:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
