@@ -13,3 +13,21 @@
  * Running on http://127.0.0.1:5000
  * Running on http://192.168.21.212:5000
 2025-06-13 16:52:42,049 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:55:54,697 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:55:54,697 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:56:47,992 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:56:47,993 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:57:04,915 - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.21.212:5000
+2025-06-13 16:57:04,917 - [33mPress CTRL+C to quit[0m
+2025-06-13 16:57:04,953 -  * Restarting with stat
+2025-06-13 16:57:06,191 -  * Debugger is active!
+2025-06-13 16:57:06,197 -  * Debugger PIN: 796-554-518
