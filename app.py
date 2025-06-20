@@ -22,17 +22,17 @@ def contact():
     return render_template('contact.html')
 
 @app.route('/home')
-def demo():
+def home():
     return render_template('home.html')
 
 
 @app.route('/home/createtask')
-def demo():
+def createtask():
     return render_template('create_task.html')
 
 
 @app.route('/home/tasks')
-def demo():
+def tasks():
     return render_template('tasks.html')
 
 
