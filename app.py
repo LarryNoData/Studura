@@ -15,10 +15,26 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
+    
 
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+@app.route('/home')
+def demo():
+    return render_template('home.html')
+
+
+@app.route('/home/createtask')
+def demo():
+    return render_template('create_task.html')
+
+
+@app.route('/home/tasks')
+def demo():
+    return render_template('tasks.html')
+
 
 @app.route('/profile/<username>')
 def profile(username):
