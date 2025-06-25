@@ -1,0 +1,25 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <form action="/home/tasks" method="POST" class="create">
+        <label for="name">Task Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="type">Normal</label>
+        <input type="checkbox" id="type" name="type"><br><br>
+
+        <label for="subject">What Subject?</label>
+        <input type="text" id="subject" name="subject"><br><br>
+
+        <label for="describe">Describe the task:</label>
+        <textarea id="describe" name="describe"></textarea><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+    <a href="/home/createtask">
+        <button type="button">Back To Tasks</button>
+    </a>
+</body>

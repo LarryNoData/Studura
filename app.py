@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import os
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
+
 
 
 app = Flask(__name__)
@@ -34,6 +35,19 @@ def createtask():
 @app.route('/home/tasks')
 def tasks():
     return render_template('tasks.html')
+
+
+@app.route('/home/createtask/create', methods=['GET', 'POST'])
+def handle_task():
+    if request.method == 'POST':
+        # process form data
+        name = request.form.get('name')
+        task_type = 'type' in request.form  # checkbox returns key if checked
+        subject = request.form.get('subject')
+        describe = request.form.get('describe')
+        # do something with the data...
+        return redirect('/home/createtask')  # or wherever you want to go next
+    return render_template('tasks.html')  # or your form page
 
 
 @app.route('/profile/<username>')

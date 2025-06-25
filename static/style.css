@@ -45,3 +45,22 @@ button:hover {
 button:active {
     opacity: 0.5;
 }
+
+nav {
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 50 px;
+
+}
+
+.title_bar {
+    margin-left: 1px;
+    margin-top: 10px;
+    padding: 50px;
+}
+
+
+.create {
+    background-color: rgb(232, 5, 5);
+    color: rgb(1,255,1);
+}
