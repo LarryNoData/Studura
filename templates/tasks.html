@@ -7,6 +7,21 @@
 
 
 
-<p> Test Tasks </p>
+<h2>All Tasks</h2>
+
+{% if tasks %}
+  <ul>
+    {% for task in tasks %}
+      <li>
+        <strong>{{ task.name }}</strong> ({{ task.type }})<br>
+        Subject: {{ task.subject }}<br>
+        Description: {{ task.describe }}
+      </li>
+      <hr>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tasks yet. Go create one!</p>
+{% endif %}
 
 <a href = '/home'><button> Back Home </button></a>

@@ -6,7 +6,7 @@ from flask import Flask, request, redirect, url_for
 
 app = Flask(__name__)
 
-
+tasks_list = []
 
 @app.route('/')
 def index():
@@ -34,20 +34,31 @@ def createtask():
 
 @app.route('/home/tasks')
 def tasks():
-    return render_template('tasks.html')
+    return render_template('tasks.html', tasks=tasks_list)
 
 
 @app.route('/home/createtask/create', methods=['GET', 'POST'])
 def handle_task():
+    global tasks_list
+
     if request.method == 'POST':
-        # process form data
         name = request.form.get('name')
-        task_type = 'type' in request.form  # checkbox returns key if checked
+        task_type = 'type' in request.form
         subject = request.form.get('subject')
         describe = request.form.get('describe')
-        # do something with the data...
-        return redirect('/home/createtask')  # or wherever you want to go next
-    return render_template('tasks.html')  # or your form page
+
+        tasks_list.append({
+            'name': name,
+            'type': 'Normal' if task_type else 'Other',
+            'subject': subject,
+            'describe': describe
+        })
+
+        return redirect('/home/tasks')
+
+    return render_template('create.html')
+
+
 
 
 @app.route('/profile/<username>')
