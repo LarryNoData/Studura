@@ -47,7 +47,7 @@ def handle_task():
         task_type = 'type' in request.form
         subject = request.form.get('subject')
         describe = request.form.get('describe')
-
+        
         tasks_list.append({
             'id': str(uuid.uuid4()),  # Generate a unique ID for the task
             'name': name,

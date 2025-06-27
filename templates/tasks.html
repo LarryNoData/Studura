@@ -1,11 +1,6 @@
-
-<head> 
-
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"> </link>
-
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
-
 
 <h2>All Tasks</h2>
 
@@ -15,21 +10,27 @@
         <li>
             <strong>{{ task.name }}</strong> ({{ task.type }})<br>
             Subject: {{ task.subject }}<br>
-            Description: {{ task.describe }}<br>
-  
+            Description:
+            {% if task.describe.strip() %}
+                {{ task.describe }}
+            {% else %}
+                <em>No Description</em>
+            {% endif %}
+            <br>
+
             <form action="/home/tasks/delete/{{ task.id }}" method="POST" style="margin-top: 5px;">
-            <button type="submit">Finished</button>
+                <button type="submit">Finished</button>
             </form>
         </li>
         <hr>
         {% endfor %}
     </ul>
-  
+
 {% else %}
-  <p>No tasks yet. Go create one!</p>
+    <p>No tasks yet. Go create one!</p>
 {% endif %}
 
 <nav>
-    <a href = '/home'><button> Back Home </button></a>
-    <a href = '/home/createtask/create'><button> Create Another Task </button></a>
+    <a href="/home"><button>Back Home</button></a>
+    <a href="/home/createtask/create"><button>Create Another Task</button></a>
 </nav>
