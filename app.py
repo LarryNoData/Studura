@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import os
 from flask import Flask, request, redirect, url_for
+import uuid 
 
 
 
@@ -48,6 +49,7 @@ def handle_task():
         describe = request.form.get('describe')
 
         tasks_list.append({
+            'id': str(uuid.uuid4()),  # Generate a unique ID for the task
             'name': name,
             'type': 'Normal' if task_type else 'Other',
             'subject': subject,
@@ -60,6 +62,11 @@ def handle_task():
 
 
 
+@app.route('/home/tasks/delete/<task_id>', methods=['POST'])
+def delete_task(task_id):
+    global tasks_list
+    tasks_list = [task for task in tasks_list if task['id'] != task_id]
+    return redirect('/home/tasks')
 
 @app.route('/profile/<username>')
 def profile(username):

@@ -10,16 +10,21 @@
 <h2>All Tasks</h2>
 
 {% if tasks %}
-  <ul>
-    {% for task in tasks %}
-      <li>
-        <strong>{{ task.name }}</strong> ({{ task.type }})<br>
-        Subject: {{ task.subject }}<br>
-        Description: {{ task.describe }}
-      </li>
-      <hr>
-    {% endfor %}
-  </ul>
+    <ul>
+        {% for task in tasks %}
+        <li>
+            <strong>{{ task.name }}</strong> ({{ task.type }})<br>
+            Subject: {{ task.subject }}<br>
+            Description: {{ task.describe }}<br>
+  
+            <form action="/home/tasks/delete/{{ task.id }}" method="POST" style="margin-top: 5px;">
+            <button type="submit">Finished</button>
+            </form>
+        </li>
+        <hr>
+        {% endfor %}
+    </ul>
+  
 {% else %}
   <p>No tasks yet. Go create one!</p>
 {% endif %}
