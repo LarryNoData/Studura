@@ -84,9 +84,10 @@ def delete_task(task_id):
     db.session.commit()
     return redirect('/home/tasks')
 
-@app.route('/home/profile/<username>')
-def profile(username):
-    return render_template('profile.html', username=username)
+@app.route('/home/profile/')
+@login_required
+def profile():
+    return render_template('profile.html', username = current_user.username)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -108,9 +109,29 @@ def login():
         user = User.query.filter_by(username=request.form['username']).first()
         if user and check_password_hash(user.password, request.form['password']):
             login_user(user)
-            return redirect('/home/tasks')
+            return redirect('/home')
         flash('Invalid credentials.')
     return render_template('login.html')
+
+@app.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current = request.form['current_password']
+        new = request.form['new_password']
+        confirm = request.form['confirm_new_password']
+
+        if not check_password_hash(current_user.password, current):
+            flash('Current password is incorrect.')
+        elif new != confirm:
+            flash('New passwords do not match.')
+        else:
+            current_user.password = generate_password_hash(new)
+            db.session.commit()
+            flash('Password updated successfully!')
+
+    return render_template('change_password.html')
+
 
 @app.route('/logout')
 @login_required

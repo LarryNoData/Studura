@@ -21,7 +21,8 @@ ul {
 }
 
 li {
-    background: white;
+    background: rgb(255, 0, 0);
+    color: rgb(1,1,255);
     padding: 10px;
     margin: 5px;
     border-radius: 5px;
@@ -64,3 +65,4 @@ nav {
     background-color: rgb(232, 5, 5);
     color: rgb(1,255,1);
 }
+
