@@ -84,7 +84,7 @@ def delete_task(task_id):
     db.session.commit()
     return redirect('/home/tasks')
 
-@app.route('/profile/<username>')
+@app.route('/home/profile/<username>')
 def profile(username):
     return render_template('profile.html', username=username)
 
