@@ -12,13 +12,13 @@
         <h1 class="STUDURA">WELCOME TO STUDURA</h1>
 
         {% if current_user.is_authenticated %}
-            <h2 style="margin-top: 10px;">Welcome, {{ current_user.username }}!</h2>
+            <h2 style="margin-top: 10px;">Welcome back, {{ current_user.username }}!</h2>
         {% endif %}
 
         <nav>
             <a href="/home"><button>Home</button></a>
             {% if current_user.is_authenticated %}
-                <a href="/profile/{{ current_user.username }}"><button>Profile</button></a>
+                <a href="/home/profile/{{ current_user.username }}"><button>Profile</button></a>
             {% else %}
                 <a href="/login"><button>Login</button></a>
             {% endif %}
