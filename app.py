@@ -1,23 +1,33 @@
-from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
+from flask import Flask, request, redirect, url_for, render_template, flash
+from werkzeug.security import generate_password_hash, check_password_hash
+from models import db, User, Task
 import os
-from flask import Flask, request, redirect, url_for
-import uuid 
-
-
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///planner.db'
+app.secret_key = 'your_secret_key'
 
-tasks_list = []
+# Initialize DB
+db.init_app(app)
+
+# Setup Login Manager
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-
 @app.route('/about')
 def about():
     return render_template('about.html')
-    
 
 @app.route('/contact')
 def contact():
@@ -27,53 +37,89 @@ def contact():
 def home():
     return render_template('home.html')
 
-
 @app.route('/home/createtask')
+@login_required
 def createtask():
     return render_template('create_task.html')
 
-
 @app.route('/home/tasks')
+@login_required
 def tasks():
-    return render_template('tasks.html', tasks=tasks_list)
-
+    user_tasks = Task.query.filter_by(owner=current_user).all()
+    return render_template('tasks.html', tasks=user_tasks)
 
 @app.route('/home/createtask/create', methods=['GET', 'POST'])
+@login_required
 def handle_task():
-    global tasks_list
-
     if request.method == 'POST':
         name = request.form.get('name')
-        task_type = 'type' in request.form
+        task_type = 'Normal' if 'type' in request.form else 'Other'
         subject = request.form.get('subject')
         describe = request.form.get('describe')
-        
-        tasks_list.append({
-            'id': str(uuid.uuid4()),  # Generate a unique ID for the task
-            'name': name,
-            'type': 'Normal' if task_type else 'Other',
-            'subject': subject,
-            'describe': describe
-        })
+
+        new_task = Task(
+            name=name,
+            type=task_type,
+            subject=subject,
+            describe=describe,
+            owner=current_user
+        )
+        db.session.add(new_task)
+        db.session.commit()
 
         return redirect('/home/tasks')
 
     return render_template('create.html')
 
-
-
-@app.route('/home/tasks/delete/<task_id>', methods=['POST'])
+@app.route('/home/tasks/delete/<int:task_id>', methods=['POST'])
+@login_required
 def delete_task(task_id):
-    global tasks_list
-    tasks_list = [task for task in tasks_list if task['id'] != task_id]
+    task = Task.query.get_or_404(task_id)
+
+    if task.owner != current_user:
+        flash("You can't delete someone else's task.")
+        return redirect('/home/tasks')
+
+    db.session.delete(task)
+    db.session.commit()
     return redirect('/home/tasks')
 
 @app.route('/profile/<username>')
 def profile(username):
     return render_template('profile.html', username=username)
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists.')
+            return redirect('/register')
+        user = User(username=username, password=password)
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/login')
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user and check_password_hash(user.password, request.form['password']):
+            login_user(user)
+            return redirect('/home/tasks')
+        flash('Invalid credentials.')
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/')
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=5000, debug=True)
+    with app.app_context():
+        db.create_all()
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
