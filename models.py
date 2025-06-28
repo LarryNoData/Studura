@@ -23,3 +23,14 @@ class Task(db.Model):
     subject = db.Column(db.String(100))
     describe = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+class Exam(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))  # Was 'exam' in the form
+    type = db.Column(db.String(50))
+    subject = db.Column(db.String(100))
+    revision = db.Column(db.Text)
+    date = db.Column(db.String(50))
+    room = db.Column(db.String(50))
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.relationship('User', backref='exams')

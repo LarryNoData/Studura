@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from flask import Flask, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Task
+from models import db, User, Task, Exam
 import os
 
 app = Flask(__name__)
@@ -34,6 +34,7 @@ def contact():
     return render_template('contact.html')
 
 @app.route('/home')
+@login_required
 def home():
     return render_template('home.html')
 
@@ -83,6 +84,60 @@ def delete_task(task_id):
     db.session.delete(task)
     db.session.commit()
     return redirect('/home/tasks')
+
+
+
+
+@app.route('/home/create/exam', methods=['GET', 'POST'])
+@login_required
+def create_exam():
+    if request.method == 'POST':
+        name = request.form.get('exam')
+        type = 'Normal' if 'type' in request.form else 'Other'
+        subject = request.form.get('subject')
+        revision = request.form.get('revision')
+        room = request.form.get('room')
+        date = request.form.get('date')
+
+        new_exam = Exam(
+            name=name,
+            type=type,
+            subject=subject,
+            revision=revision,
+            date=date,
+            room=room,
+            owner=current_user
+        )
+        db.session.add(new_exam)
+        db.session.commit()
+
+        return redirect('/home/exams')
+
+    return render_template('create_exam.html')
+
+
+
+@app.route('/home/exams')
+@login_required
+def view_exams():
+    user_exams = Exam.query.filter_by(owner=current_user).all()
+    return render_template('exams.html', exams=user_exams)
+
+
+@app.route('/home/exams/delete/<int:exam_id>', methods=['POST'])
+@login_required
+def delete_exam(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+
+    if exam.owner != current_user:
+        flash("You can't delete someone else's exam.")
+        return redirect('/home/exams')
+
+    db.session.delete(exam)
+    db.session.commit()
+    return redirect('/home/exams')
+
+
 
 @app.route('/home/profile/')
 @login_required

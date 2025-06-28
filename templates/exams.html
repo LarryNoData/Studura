@@ -1,0 +1,37 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<h2>All Exams</h2>
+
+{% if exams %}
+    <ul>
+        {% for exam in exams %}
+        <li>
+            <strong>{{ exam.name }}</strong> ({{ exam.type }})<br>
+            Subject: {{ exam.subject }}<br>
+            Revision Notes:
+            {% if exam.revision.strip() %}
+                {{ exam.revision }}
+            {% else %}
+                <em>No revision provided</em>
+            {% endif %}
+            <br>
+            Room: {{ exam.room }}<br>
+            Date: {{ exam.date }}<br>
+
+            <form action="/home/exams/delete/{{ exam.id }}" method="POST" style="margin-top: 5px;">
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+        <hr>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No exams yet. Go create one!</p>
+{% endif %}
+
+<nav>
+    <a href="/home"><button>Back Home</button></a>
+    <a href="/home/create/exam"><button>Create Exam</button></a>
+</nav>
