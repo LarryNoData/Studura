@@ -13,10 +13,17 @@ load_dotenv()
 
 app = Flask(__name__)
 
+load_dotenv()
 
+app = Flask(__name__)
+
+# Convert postgres:// to postgresql+psycopg:// for compatibility
+if os.environ.get("DATABASE_URL", "").startswith("postgres://"):
+    os.environ["DATABASE_URL"] = os.environ["DATABASE_URL"].replace("postgres://", "postgresql+psycopg://")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///planner.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # Secret key from env or default
 app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')
