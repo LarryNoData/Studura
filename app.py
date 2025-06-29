@@ -1,13 +1,25 @@
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
+import os
 from flask import Flask, request, redirect, url_for, render_template, flash
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Task, Exam
-import os
+from flask_migrate import Migrate
+
+
+
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///planner.db'
-app.secret_key = 'your_secret_key'
+
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///planner.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Secret key from env or default
+app.secret_key = os.environ.get('SECRET_KEY', 'your_secret_key')
 
 # Initialize DB
 db.init_app(app)
@@ -17,9 +29,14 @@ login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
+#migrating files
+migrate = Migrate(app, db)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route('/')
 def index():
@@ -67,7 +84,6 @@ def handle_task():
         )
         db.session.add(new_task)
         db.session.commit()
-
         return redirect('/home/tasks')
 
     return render_template('create.html')
@@ -76,16 +92,12 @@ def handle_task():
 @login_required
 def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
-
     if task.owner != current_user:
         flash("You can't delete someone else's task.")
         return redirect('/home/tasks')
-
     db.session.delete(task)
     db.session.commit()
     return redirect('/home/tasks')
-
-
 
 
 @app.route('/home/create/exam', methods=['GET', 'POST'])
@@ -110,12 +122,9 @@ def create_exam():
         )
         db.session.add(new_exam)
         db.session.commit()
-
         return redirect('/home/exams')
 
     return render_template('create_exam.html')
-
-
 
 @app.route('/home/exams')
 @login_required
@@ -123,26 +132,22 @@ def view_exams():
     user_exams = Exam.query.filter_by(owner=current_user).all()
     return render_template('exams.html', exams=user_exams)
 
-
 @app.route('/home/exams/delete/<int:exam_id>', methods=['POST'])
 @login_required
 def delete_exam(exam_id):
     exam = Exam.query.get_or_404(exam_id)
-
     if exam.owner != current_user:
         flash("You can't delete someone else's exam.")
         return redirect('/home/exams')
-
     db.session.delete(exam)
     db.session.commit()
     return redirect('/home/exams')
 
 
-
 @app.route('/home/profile/')
 @login_required
 def profile():
-    return render_template('profile.html', username = current_user.username)
+    return render_template('profile.html', username=current_user.username)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -184,9 +189,7 @@ def change_password():
             current_user.password = generate_password_hash(new)
             db.session.commit()
             flash('Password updated successfully!')
-
     return render_template('change_password.html')
-
 
 @app.route('/logout')
 @login_required
