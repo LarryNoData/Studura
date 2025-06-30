@@ -17,12 +17,16 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Convert postgres:// to postgresql+psycopg:// for compatibility
+# Convert legacy Postgres URL if needed
 if os.environ.get("DATABASE_URL", "").startswith("postgres://"):
     os.environ["DATABASE_URL"] = os.environ["DATABASE_URL"].replace("postgres://", "postgresql+psycopg://")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///planner.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Use Supabase in production, SQLite locally
+uri = os.environ.get("DATABASE_URL", "sqlite:///planner.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+
 
 
 # Secret key from env or default
