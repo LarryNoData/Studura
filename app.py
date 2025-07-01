@@ -19,16 +19,19 @@ load_dotenv()
 
 raw_url = os.getenv("DATABASE_URL")
 if raw_url:
-    # Adjust prefix if Render gives 'postgres://'
     if raw_url.startswith("postgres://"):
         raw_url = raw_url.replace("postgres://", "postgresql+psycopg://")
     elif raw_url.startswith("postgresql://"):
         raw_url = raw_url.replace("postgresql://", "postgresql+psycopg://")
 
-    print("📡 Resolved DB URI:", app.config["SQLALCHEMY_DATABASE_URI"]) 
+    app.config["SQLALCHEMY_DATABASE_URI"] = raw_url
+
+    #Now it's safe to print
+    print("Resolved DB URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 else:
-    # Default to a local SQLite file
     app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///planner.db"
+    print("Using fallback SQLite DB")
+
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
