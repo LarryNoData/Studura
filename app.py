@@ -4,13 +4,41 @@ from flask import Flask, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Task, Exam
 import os
+from dotenv import load_dotenv
+from flask_migrate import Migrate
+
+
+print("App loaded and Flask-Migrate initialized.")
+
+
+
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///planner.db'
-app.secret_key = 'your_secret_key'
+
+load_dotenv()
+
+
+raw_url = os.getenv("DATABASE_URL")
+if raw_url:
+    # Adjust prefix if Render gives 'postgres://'
+    if raw_url.startswith("postgres://"):
+        raw_url = raw_url.replace("postgres://", "postgresql+psycopg://")
+    app.config["SQLALCHEMY_DATABASE_URI"] = raw_url
+else:
+    # Default to a local SQLite file
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///planner.db"
+
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 
 # Initialize DB
 db.init_app(app)
+
+#makemigrations
+migrate = Migrate()
+migrate.init_app(app, db)
+
 
 # Setup Login Manager
 login_manager = LoginManager()
@@ -193,6 +221,8 @@ def change_password():
 def logout():
     logout_user()
     return redirect('/')
+
+
 
 if __name__ == '__main__':
     with app.app_context():
