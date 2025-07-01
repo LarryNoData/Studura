@@ -12,8 +12,6 @@ print("App loaded and Flask-Migrate initialized.")
 
 
 
-
-
 app = Flask(__name__)
 
 load_dotenv()
