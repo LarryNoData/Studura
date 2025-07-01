@@ -1,0 +1,19 @@
+# Skip SQLite and local data
+*.sqlite
+*.sqlite3
+planner.db
+
+# Flask instance folder
+instance/
+
+# Bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code
+.vscode/
+
+# Alembic caches
+migrations/versions/__pycache__/

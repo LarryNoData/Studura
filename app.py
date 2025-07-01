@@ -13,6 +13,8 @@ print("App loaded and Flask-Migrate initialized.")
 
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
+
 
 load_dotenv()
 
