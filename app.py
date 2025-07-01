@@ -22,7 +22,9 @@ if raw_url:
     # Adjust prefix if Render gives 'postgres://'
     if raw_url.startswith("postgres://"):
         raw_url = raw_url.replace("postgres://", "postgresql+psycopg://")
-    app.config["SQLALCHEMY_DATABASE_URI"] = raw_url
+    elif raw_url.startswith("postgresql://"):
+        raw_url = raw_url.replace("postgresql://", "postgresql+psycopg://")
+
     print("📡 Resolved DB URI:", app.config["SQLALCHEMY_DATABASE_URI"]) 
 else:
     # Default to a local SQLite file
