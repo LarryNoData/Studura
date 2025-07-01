@@ -1,4 +1,13 @@
 #!/bin/bash
-set -e              # fail fast on any error
-flask db upgrade    # apply migrations on Render
+set -e  # Exit immediately if any command fails
+
+# Run migration and capture errors
+if ! python manage.py db upgrade; then
+    echo "DB upgrade failed"
+    exit 1
+else
+    echo "Database upgraded successfully"
+fi
+
+# Start the Gunicorn server
 exec gunicorn app:app
