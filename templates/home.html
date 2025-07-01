@@ -27,5 +27,21 @@
             <a href="/logout"><button>Logout</button></a>
         </nav>
     </div>
+
+    <div class="sidebar">
+        <nav class = "sidebarcontent">
+          <ul class = "sidebarcontent">
+            <li class = "sidebarcontent"><a href="/home"><button>Home</button></a></li>
+            <li class = "sidebarcontent"><a href="/home/tasks"><button>Tasks</button></a></li>
+            <li class = "sidebarcontent"><a href="/home/exams"><button>Exams</button></a></li>
+            {% if current_user.is_authenticated %}
+                <li class = "sidebarcontent"><a href="/home/profile"><button>Profile</button></a></li>
+            {% else %}
+                <li class = "sidebarcontent"><a href="/login"><button>Login</button></a></li>
+            {% endif %}
+            <li class = "sidebarcontent"><a href="/logout"><button>Logout</button></a></li>
+          </ul>
+        </nav>
+      </div>
 </body>
 </html>
