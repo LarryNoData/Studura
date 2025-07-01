@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Starting Studura at $(date)"
+
 set -e  # Exit immediately if any command fails
 
 # Run migration and capture errors

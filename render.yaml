@@ -1,7 +1,7 @@
 services:
   - type: web
-    name: flask-demo
+    name: Studura
     env: python
     plan: free
-    buildCommand: ""
-    startCommand: python app.py
+    buildCommand: pip install -r requirements.txt
+    startCommand: ./launch.sh
