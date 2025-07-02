@@ -4,6 +4,7 @@ from flask import Flask, request, redirect, url_for, render_template, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -26,6 +27,10 @@ class Task(db.Model):
     type = db.Column(db.String(50), nullable=False)
     subject = db.Column(db.String(100), nullable=True)
     describe = db.Column(db.Text, nullable=True)
+
+    #New columns for insights
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    completed_at = db.Column(db.DateTime, nullable=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

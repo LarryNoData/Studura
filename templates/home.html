@@ -42,6 +42,19 @@
             <li class = "sidebarcontent"><a href="/logout"><button>Logout</button></a></li>
           </ul>
         </nav>
-      </div>
+    </div>
+    
+    {% if insights %}
+        <div class="insights-card">
+            <h3>Studura Insight</h3>
+            <ul>
+            {% for tip in insights %}
+                <li>{{ tip | safe }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+
 </body>
 </html>

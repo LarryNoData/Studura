@@ -6,6 +6,9 @@ from models import db, User, Task, Exam
 import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
+from insights import generate_study_insights
+from datetime import datetime, timezone
+
 
 
 print("App loaded and Flask-Migrate initialized.")
@@ -70,7 +73,9 @@ def contact():
 @app.route('/home')
 @login_required
 def home():
-    return render_template('home.html')
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    insights = generate_study_insights(user_tasks)
+    return render_template('home.html',insights=insights)
 
 @app.route('/home/tasks')
 @login_required
@@ -115,6 +120,17 @@ def delete_task(task_id):
     db.session.commit()
     return redirect('/home/tasks')
 
+@app.route('/home/tasks/complete/<int:task_id>', methods=['POST'])
+@login_required
+def complete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.owner != current_user:
+        flash("You can't complete someone else's task.")
+        return redirect('/home/tasks')
+    
+    task.completed_at = datetime.now(timezone.utc)
+    db.session.commit()
+    return redirect('/home/tasks')
 
 
 

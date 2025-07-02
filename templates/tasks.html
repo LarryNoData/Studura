@@ -1,36 +1,50 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-</head>
-
-<h2>All Tasks</h2>
-
-{% if tasks %}
+  </head>
+  
+  <h2>All Tasks</h2>
+  
+  {% if tasks %}
     <ul>
-        {% for task in tasks %}
-        <li>
-            <strong>{{ task.name }}</strong> ({{ task.type }})<br>
+      {% for task in tasks %}
+        <li class="task {% if task.completed_at %}task--completed{% endif %}">
+          <div class="task__header">
+            <strong>{{ task.name }}</strong> <span class="task__type">({{ task.type }})</span>
+          </div>
+  
+          <div class="task__body">
             Subject: {{ task.subject }}<br>
             Description:
             {% if task.describe.strip() %}
-                {{ task.describe }}
+              {{ task.describe }}
             {% else %}
-                <em>No Description</em>
+              <em>No Description</em>
             {% endif %}
-            <br>
-
-            <form action="/home/tasks/delete/{{ task.id }}" method="POST" style="margin-top: 5px;">
-                <button type="submit">Finished</button>
+          </div>
+  
+          <div class="task__actions">
+            {% if not task.completed_at %}
+              <form action="/home/tasks/complete/{{ task.id }}" method="POST">
+                <button type="submit" class = "task__actions">Finished</button>
+              </form>
+            {% else %}
+              <span class="task__badge" class = "task__actions">Completed</span>
+            {% endif %}
+  
+            <form action="/home/tasks/delete/{{ task.id }}" method="POST">
+              <button type="submit">Delete</button>
             </form>
+          </div>
         </li>
         <hr>
-        {% endfor %}
+      {% endfor %}
     </ul>
-
-{% else %}
+  {% else %}
     <p>No tasks yet. Go create one!</p>
-{% endif %}
-
-<nav>
+  {% endif %}
+  
+  <nav>
     <a href="/home"><button>Back Home</button></a>
     <a href="{{ url_for('create_task') }}"><button>Create Task</button></a>
-</nav>
+  </nav>
+  
