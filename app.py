@@ -99,6 +99,12 @@ def create_task():
             describe=describe,
             owner=current_user
         )
+
+
+        due_date = request.form.get("due_date")
+        if due_date:
+            new_task.due_date = datetime.strptime(due_date, "%Y-%m-%d")
+                                     
         db.session.add(new_task)
         db.session.commit()
 

@@ -7,11 +7,13 @@ def generate_study_insights(tasks):
     completed_tasks = [t for t in tasks if t.completed_at]
     total = len(completed_tasks)
     print('I AM RUNNING, check if i return')
-    if total >= 5:
+    if total >=1:
         weekdays = [t.completed_at.strftime('%A') for t in completed_tasks]
         freq = Counter(weekdays)
         most_common_day = freq.most_common(1)[0][0]
         insights.append(f"You usually complete tasks on **{most_common_day}s**. Way to go!")
+        insights.append(f'You have completed {total} tasks!')
+    if total >= 5:
         insights.append("Amazing — you’ve completed over 5 tasks! Keep the momentum going.")
 
 

@@ -27,7 +27,7 @@ class Task(db.Model):
     type = db.Column(db.String(50), nullable=False)
     subject = db.Column(db.String(100), nullable=True)
     describe = db.Column(db.Text, nullable=True)
-
+    due_date = db.Column(db.DateTime, nullable=True)
     #New columns for insights
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
