@@ -72,20 +72,15 @@ def contact():
 def home():
     return render_template('home.html')
 
-@app.route('/home/createtask')
-@login_required
-def createtask():
-    return render_template('create_task.html')
-
 @app.route('/home/tasks')
 @login_required
 def tasks():
     user_tasks = Task.query.filter_by(owner=current_user).all()
     return render_template('tasks.html', tasks=user_tasks)
 
-@app.route('/home/createtask/create', methods=['GET', 'POST'])
+@app.route('/home/tasks/create', methods=['GET', 'POST'])
 @login_required
-def handle_task():
+def create_task():
     if request.method == 'POST':
         name = request.form.get('name')
         task_type = 'Normal' if 'type' in request.form else 'Other'
@@ -104,7 +99,8 @@ def handle_task():
 
         return redirect('/home/tasks')
 
-    return render_template('create.html')
+    origin = request.args.get('origin')
+    return render_template('create.html',show_return_home=(origin == 'home'))
 
 @app.route('/home/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required

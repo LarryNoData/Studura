@@ -3,7 +3,7 @@
 </head>
 
 <body>
-    <form action="/home/createtask/create" method="POST" class = 'create'>
+    <form action="/home/tasks/create" method="POST" class = 'create'>
         <label for="name">Task Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -19,7 +19,13 @@
         <input type="submit" value="Complete" class='login'>
     </form>
 
-    <a href="/home/createtask">
-        <button type="button">Back To Tasks</button>
-    </a>
+    <nav>
+        <a href="/home/tasks">
+            <button type="button">Back To Tasks</button>
+        </a>
+        {% if show_return_home %}
+            <a href="{{ url_for('home') }}" class="btn btn-light"><button>Return Home</button></a>
+        {% endif %}
+
+    </nav>
 </body>

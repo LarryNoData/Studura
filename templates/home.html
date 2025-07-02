@@ -21,7 +21,7 @@
             {% else %}
                 <a href="/login"><button>Login</button></a>
             {% endif %}
-            <a href="/home/createtask"><button>Create Task</button></a>
+            <a href="{{ url_for('create_task') }}?origin=home"><button>Create Task</button></a>
             <a href="/home/tasks"><button>Tasks</button></a>
             <a href="/home/exams"><button>Exams</button></a>
             <a href="/logout"><button>Logout</button></a>
