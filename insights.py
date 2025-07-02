@@ -6,7 +6,6 @@ def generate_study_insights(tasks):
 
     completed_tasks = [t for t in tasks if t.completed_at]
     total = len(completed_tasks)
-    print('I AM RUNNING, check if i return')
     if total >=1:
         weekdays = [t.completed_at.strftime('%A') for t in completed_tasks]
         freq = Counter(weekdays)

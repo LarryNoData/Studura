@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from flask_migrate import Migrate
 from insights import generate_study_insights
 from datetime import datetime, timezone
+import json
 
 
 
@@ -239,6 +240,21 @@ def change_password():
 
     return render_template('change_password.html')
 
+
+@app.route('/home/calendar')
+@login_required
+def calendar_view():
+    tasks = Task.query.filter_by(user_id=current_user.id).all()
+    events = []
+    for task in tasks:
+        if task.due_date:
+            events.append({
+                'title': task.name,
+                'start': task.due_date.strftime('%Y-%m-%d'),
+                'color': '#007bff' if not task.completed_at else '#28a745'
+            })
+
+    return render_template("calendar.html", calendar_tasks=json.dumps(events))
 
 @app.route('/logout')
 @login_required

@@ -2,7 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <title>Demo Page</title>
+    <title>Home</title>
 </head>
 
 <body>
@@ -39,6 +39,7 @@
             {% else %}
                 <li class = "sidebarcontent"><a href="/login"><button>Login</button></a></li>
             {% endif %}
+            <li class = "sidebarcontent"><a href="/home/calendar"><button>Calendar</button></a></li>
             <li class = "sidebarcontent"><a href="/logout"><button>Logout</button></a></li>
           </ul>
         </nav>

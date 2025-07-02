@@ -142,3 +142,11 @@ nav {
     font-size: 0.85em;
     border-radius: 4px;
   }
+
+#calendar {
+    
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    
+}

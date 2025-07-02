@@ -14,6 +14,12 @@
   
           <div class="task__body">
             Subject: {{ task.subject }}<br>
+            {% if task.due_date %}
+                Due Date: {{ task.due_date.strftime('%Y-%m-%d') }} <br>
+            {% else %}
+                Due Date: <em>Not set</em> <br>
+            {% endif %}
+
             Description:
             {% if task.describe.strip() %}
               {{ task.describe }}
