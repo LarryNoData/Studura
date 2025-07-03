@@ -21,10 +21,14 @@ def upgrade():
     with op.batch_alter_table('exam', schema=None) as batch_op:
         batch_op.add_column(sa.Column('created_at_exam', sa.DateTime(), nullable=True))
         batch_op.add_column(sa.Column('completed_at_exam', sa.DateTime(), nullable=True))
-        batch_op.alter_column('date',
-               existing_type=sa.VARCHAR(length=50),
-               type_=sa.DateTime(),
-               existing_nullable=True)
+        batch_op.alter_column(
+            'date',
+            existing_type=sa.VARCHAR(length=50),
+            type_=sa.DateTime(),
+            existing_nullable=True,
+            postgresql_using="date::timestamp without time zone"
+        )
+
 
     # ### end Alembic commands ###
 
