@@ -79,8 +79,8 @@ def contact():
 @login_required
 def home():
     tasks = Task.query.filter_by(user_id=current_user.id).all()
-    archived = TaskArchive.query.filter_by(owner_id=current_user.id).all()
-    combined = tasks + archived
+    #archived = TaskArchive.query.filter_by(owner_id=current_user.id).all()
+    combined = tasks #+ archived
 
     insights = generate_study_insights(combined)
     return render_template('home.html', insights=insights)
