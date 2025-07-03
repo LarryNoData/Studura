@@ -407,6 +407,13 @@ def logout():
     logout_user()
     return redirect('/')
 
+@app.route('/migrate-db')
+def migrate_db():
+    from flask_migrate import upgrade
+    upgrade()
+    return "Migration applied!"
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
