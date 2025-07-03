@@ -150,3 +150,51 @@ nav {
     padding: 20px;
     
 }
+
+
+.calendar-grid, .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1em;
+    margin: 1em 0;
+  }
+  
+  .calendar-cell {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    min-height: 100px;
+  }
+  
+  .calendar-cell.today {
+    border: 2px solid #007bff;
+    background-color: #e0f5ff;
+  }
+  
+  .task-badge {
+    background-color: #41ff07;
+    color: #212529;
+    border-radius: 4px;
+    padding: 0.3em;
+    margin-top: 0.3em;
+    font-size: 0.9em;
+  }
+  
+  .exam-badge {
+    background-color: #17a2b8;
+    color: #fff;
+    border-radius: 4px;
+    padding: 0.3em;
+    margin-top: 0.3em;
+    font-size: 0.9em;
+  }
+
+.task-badge_empty{
+    background-color: #ffc107;
+    color: #212529;
+    border-radius: 4px;
+    padding: 0.3em;
+    margin-top: 0.3em;
+    font-size: 0.9em;
+}

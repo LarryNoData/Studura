@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weekly Calendar Studura</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <h2>Weekly Calendar Week of {{ today.strftime('%d %B %Y') }}</h2>
+
+  <nav>
+    <a href="{{ url_for('calendar_week', date=prev_date) }}">
+        <button>Previous Week</button>
+    </a>
+    <a href="{{ url_for('calendar_week', date=next_date) }}">
+        <button>Next Week</button>
+    </a>
+    
+    <a href="{{ url_for('calendar_month') }}"><button>Switch to Monthly View</button></a>
+    <a href="/home"><button>Back Home</button></a>
+  </nav>
+
+  <div class="week-grid">
+    {% for day in week_days %}
+      <div class="calendar-cell {% if day.is_today %}today{% endif %}">
+        <strong>{{ day.date.strftime('%A %d') }}</strong><br>
+        
+
+        {% if day.exams %}
+          <p><em>Exams:</em></p>
+          {% for exam in day.exams %}
+            <a href="{{ url_for('view_exam_from_calendar', exam_id=exam.id, origin='week') }}">
+                <div class="exam-badge">{{ exam.subject }}{% if exam.title %} – {{ exam.title }}{% endif %}</div>
+            </a>          
+          
+          {% endfor %}
+        {% endif %}
+
+        {% if day.tasks %}
+          <p><em>Tasks:</em></p>
+          {% for task in day.tasks %}
+            <a href="{{ url_for('view_task', task_id=task.id, origin='week') }}">
+                <div class="task-badge">{{ task.name }}</div>
+            </a>
+          
+          {% endfor %}
+        {% endif %}
+
+        {% if not day.exams and not day.tasks %}
+          <div class="task-badge empty">No items</div>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>

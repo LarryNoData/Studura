@@ -7,9 +7,11 @@ import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 from insights import generate_study_insights
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import json
-from sqlalchemy import text
+from month_calendar import generate_month_data
+from week_calendar import generate_week_data
+from calendar import monthrange
 
 
 
@@ -220,6 +222,23 @@ def delete_exam(exam_id):
     db.session.commit()
     return redirect('/home/exams')
 
+@app.route('/home/exams/edit/<int:exam_id>', methods=['GET', 'POST'])
+@login_required
+def edit_exam(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+
+    if request.method == 'POST':
+        exam.name = request.form['name']
+        exam.type = request.form['type']
+        exam.subject = request.form['subject']
+        exam.revision = request.form['revision']
+        exam.room = request.form['room']
+        exam.date = datetime.strptime(request.form['date'], '%Y-%m-%d') if request.form['date'] else None
+
+        db.session.commit()
+        return redirect(url_for('view_exam', exam_id=exam.id, origin='week'))  # or 'month', if you prefer
+
+    return render_template('edit_exam.html', exam=exam)
 
 
 @app.route('/home/profile/')
@@ -271,36 +290,108 @@ def change_password():
     return render_template('change_password.html')
 
 
-@app.route('/home/calendar')
-@login_required
-def calendar_view():
-    tasks = Task.query.filter_by(user_id=current_user.id).all()
-    events = []
-    for task in tasks:
-        if task.due_date:
-            events.append({
-                'title': task.name,
-                'start': task.due_date.strftime('%Y-%m-%d'),
-                'color': '#007bff' if not task.completed_at else '#00b3ff'
-            })
+#@app.route('/home/calendar')
+#@login_required
+#def calendar_view():
+#    tasks = Task.query.filter_by(user_id=current_user.id).all()
+#    events = []
+#    for task in tasks:
+#        if task.due_date:
+#            events.append({
+#                'title': task.name,
+#                'start': task.due_date.strftime('%Y-%m-%d'),
+#                'color': '#007bff' if not task.completed_at else '#00b3ff'
+#            })
 
-    exams = Exam.query.filter_by(owner_id=current_user.id).all()
-    for exam in exams:
-        if exam.date:
-            events.append({
-                'title': exam.name,
-                'start': exam.date.strftime('%Y-%m-%d'),
-                'color': '#007bff' if not exam.completed_at_exam else '#00b3ff'
-            })
-    return render_template("calendar.html", calendar_tasks=json.dumps(events))
+ #   exams = Exam.query.filter_by(owner_id=current_user.id).all()
+  #  for exam in exams:
+   #     if exam.date:
+    #        events.append({
+     #           'title': exam.name,
+      #          'start': exam.date.strftime('%Y-%m-%d'),
+       #         'color': '#007bff' if not exam.completed_at_exam else '#00b3ff'
+        #    })
+   # return render_template("calendar.html", calendar_tasks=json.dumps(events))
+
+
+@app.route('/home/calendar/month')
+@login_required
+def calendar_month():
+    # Get current month/year or use query
+    month = request.args.get('month', datetime.today().month, type=int)
+    year = request.args.get('year', datetime.today().year, type=int)
+
+    # Calculate previous/next month
+    prev_month = month - 1 or 12
+    prev_year = year - 1 if month == 1 else year
+    next_month = month + 1 if month < 12 else 1
+    next_year = year + 1 if month == 12 else year
+
+    # Create a display date for header
+    display_date = datetime(year, month, 1)
+
+    # Query data
+    tasks = Task.query.filter_by(owner=current_user).all()
+    exams = Exam.query.filter_by(owner=current_user).all()
+    calendar_days = generate_month_data(year, month, tasks, exams)
+
+    return render_template(
+        'calendar_month.html',
+        calendar_days=calendar_days,
+        display_date=display_date,
+        month=month, year=year,
+        prev_month=prev_month, prev_year=prev_year,
+        next_month=next_month, next_year=next_year
+    )
+
+
+
+@app.route('/home/calendar/week')
+@login_required
+def calendar_week():
+    ref_date_str = request.args.get('date')
+    ref_date = datetime.strptime(ref_date_str, '%Y-%m-%d') if ref_date_str else datetime.today()
+
+    # Calculate previous and next week
+    prev_date = ref_date - timedelta(days=7)
+    next_date = ref_date + timedelta(days=7)
+
+    tasks = Task.query.filter_by(owner=current_user).all()
+    exams = Exam.query.filter_by(owner=current_user).all()
+    week_days = generate_week_data(ref_date, tasks, exams)
+
+    return render_template(
+        'calendar_week.html',
+        week_days=week_days,
+        today=ref_date,
+        prev_date=prev_date.strftime('%Y-%m-%d'),
+        next_date=next_date.strftime('%Y-%m-%d')
+    )
+
+
+@app.route('/home/tasks/view/<int:task_id>')
+@login_required
+def view_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    origin = request.args.get('origin')
+    return render_template('tasks.html', single_task=task, origin=origin)
+
+
+@app.route('/home/exams/view/<int:exam_id>')
+@login_required
+def view_exam_from_calendar(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+    origin = request.args.get('origin')
+    return render_template('exams.html', single_exam=exam, origin=origin)
+
+
+
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect('/')
-
-
 
 if __name__ == '__main__':
     with app.app_context():
