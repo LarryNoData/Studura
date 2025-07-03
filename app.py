@@ -9,6 +9,8 @@ from flask_migrate import Migrate
 from insights import generate_study_insights
 from datetime import datetime, timezone
 import json
+from sqlalchemy import text
+
 
 
 
@@ -161,6 +163,11 @@ def create_exam():
             room=room,
             owner=current_user
         )
+
+        due_date = request.form.get("due_date")
+        if date:
+            new_exam.date = datetime.strptime(date, "%Y-%m-%d")
+        
         db.session.add(new_exam)
         db.session.commit()
 
@@ -251,9 +258,17 @@ def calendar_view():
             events.append({
                 'title': task.name,
                 'start': task.due_date.strftime('%Y-%m-%d'),
-                'color': '#007bff' if not task.completed_at else '#28a745'
+                'color': '#007bff' if not task.completed_at else '#00b3ff'
             })
 
+    exams = Exam.query.filter_by(owner_id=current_user.id).all()
+    for exam in exams:
+        if exam.date:
+            events.append({
+                'title': exam.name,
+                'start': exam.date.strftime('%Y-%m-%d'),
+                'color': '#007bff' if not exam.completed_at_exam else '#00b3ff'
+            })
     return render_template("calendar.html", calendar_tasks=json.dumps(events))
 
 @app.route('/logout')

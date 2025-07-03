@@ -3,7 +3,6 @@ from datetime import datetime
 
 def generate_study_insights(tasks):
     insights = []
-
     completed_tasks = [t for t in tasks if t.completed_at]
     total = len(completed_tasks)
     if total >=1:

@@ -42,7 +42,10 @@ class Exam(db.Model):
     type = db.Column(db.String(50), nullable=False)
     subject = db.Column(db.String(100), nullable=True)
     revision = db.Column(db.Text, nullable=True)
-    date = db.Column(db.String(50), nullable=True)
+    date = db.Column(db.DateTime, nullable=True)
     room = db.Column(db.String(50), nullable=True)
+    created_at_exam = db.Column(db.DateTime, default=datetime.utcnow)
+    completed_at_exam = db.Column(db.DateTime, nullable=True)
+
 
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

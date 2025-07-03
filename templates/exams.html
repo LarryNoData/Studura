@@ -18,7 +18,11 @@
             {% endif %}
             <br>
             Room: {{ exam.room }}<br>
-            Date: {{ exam.date }}<br>
+            {% if exam.date %}
+                Date: {{ exam.date.strftime('%Y-%m-%d') }} <br>
+            {% else %}
+                Date: <em>Not set</em> <br>
+            {% endif %}
 
             <form action="/home/exams/delete/{{ exam.id }}" method="POST" style="margin-top: 5px;">
                 <button type="submit">Delete</button>
