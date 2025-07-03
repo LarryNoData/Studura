@@ -1,0 +1,23 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<form method="POST" action="{{ url_for('edit_task', task_id=task.id) }}">
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ task.name }}"><br>
+  
+    <label>Type:</label><br>
+    <input type="text" name="type" value="{{ task.type }}"><br>
+  
+    <label>Subject:</label><br>
+    <input type="text" name="subject" value="{{ task.subject }}"><br>
+  
+    <label>Description:</label><br>
+    <textarea name="describe">{{ task.describe }}</textarea><br>
+  
+    <label>Due Date:</label><br>
+    <input type="date" name="due_date" value="{{ task.due_date.strftime('%Y-%m-%d') if task.due_date }}"><br>
+  
+    <button type="submit">Update Task</button>
+</form>
+  

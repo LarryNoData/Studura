@@ -116,6 +116,29 @@ def create_task():
     origin = request.args.get('origin')
     return render_template('create.html',show_return_home=(origin == 'home'))
 
+@app.route('/task/edit/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    if task.owner != current_user:
+        flash("You can't edit someone else's task!", "danger")
+        return redirect(url_for('home'))
+
+    if request.method == 'POST':
+        task.name = request.form['name']
+        task.type = request.form['type']
+        task.subject = request.form['subject']
+        task.describe = request.form['describe']
+        date_input = request.form['due_date']
+        task.due_date = datetime.strptime(date_input, '%Y-%m-%d') if date_input else None
+
+        db.session.commit()
+        flash("Task updated successfully!", "success")
+        return redirect(url_for('tasks'))
+
+    return render_template('edit_task.html', task=task)
+
+
 @app.route('/home/tasks/delete/<int:task_id>', methods=['POST'])
 @login_required
 def delete_task(task_id):
