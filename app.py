@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from flask import Flask, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Task, Exam, TaskArchive
+from models import db, User, Task, Exam
 import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
@@ -15,7 +15,6 @@ from calendar import monthrange
 
 
 
-print("Detected Tables:", db.metadata.tables.keys())
 
 print("App loaded and Flask-Migrate initialized.")
 
@@ -79,13 +78,9 @@ def contact():
 @app.route('/home')
 @login_required
 def home():
-    tasks = Task.query.filter_by(user_id=current_user.id).all()
-    #archived = TaskArchive.query.filter_by(owner_id=current_user.id).all()
-    combined = tasks #+ archived
-
-    insights = generate_study_insights(combined)
-    return render_template('home.html', insights=insights)
-
+    user_tasks = Task.query.filter_by(user_id=current_user.id).all()
+    insights = generate_study_insights(user_tasks)
+    return render_template('home.html',insights=insights)
 
 @app.route('/home/tasks')
 @login_required
@@ -154,16 +149,6 @@ def delete_task(task_id):
     if task.owner != current_user:
         flash("You can't delete someone else's task.")
         return redirect('/home/tasks')
-
-
-    archive = TaskArchive(
-    name=task.name,
-    created_at=task.created_at,
-    completed_at=task.completed_at,
-    owner_id=current_user.id
-    )
-    db.session.add(archive)
-
 
     db.session.delete(task)
     db.session.commit()
@@ -407,13 +392,6 @@ def view_exam_from_calendar(exam_id):
 def logout():
     logout_user()
     return redirect('/')
-
-@app.route('/migrate-db')
-def migrate_db():
-    from flask_migrate import upgrade
-    upgrade()
-    return "Migration applied!"
-
 
 if __name__ == '__main__':
     with app.app_context():

@@ -31,7 +31,6 @@ class Task(db.Model):
     #New columns for insights
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
-
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Exam(db.Model):
@@ -51,10 +50,3 @@ class Exam(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-
-class TaskArchive(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    created_at = db.Column(db.DateTime)
-    completed_at = db.Column(db.DateTime)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
