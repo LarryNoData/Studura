@@ -1,89 +1,41 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  
-  {% if single_exam %}
-    <h2>Exam Details</h2>
-  
+</head>
+
+<h2>All Exams</h2>
+
+{% if exams %}
     <ul>
-      <li>
-        <strong>{{ single_exam.name }}</strong> ({{ single_exam.type }})<br>
-        Subject: {{ single_exam.subject }}<br>
-        Revision Notes:
-        {% if single_exam.revision.strip() %}
-          {{ single_exam.revision }}
-        {% else %}
-          <em>No revision provided</em>
-        {% endif %}
-        <br>
-        Room: {{ single_exam.room }}<br>
-        {% if single_exam.date %}
-          Date: {{ single_exam.date.strftime('%Y-%m-%d') }} <br>
-        {% else %}
-          Date: <em>Not set</em> <br>
-        {% endif %}
-  
-        <form action="/home/exams/delete/{{ single_exam.id }}" method="POST" style="margin-top: 5px;">
-          <button type="submit">Delete</button>
-        </form>
-        <a href="{{ url_for('edit_exam', exam_id=single_exam.id) }}">
-          <button type="button">Edit</button>
-        </a>
-      </li>
-      <hr>
-    </ul>
-  
-    <nav>
-        {% if origin == 'month' %}
-          <a href="{{ url_for('calendar_month') }}"><button>Back to Monthly Calendar</button></a>
-        {% elif origin == 'week' %}
-          <a href="{{ url_for('calendar_week') }}"><button>Back to Weekly Calendar</button></a>
-        {% endif %}
-        <a href="/home"><button>Back Home</button></a>
-    </nav>
-      
-  
-  {% else %}
-  
-    <h2>All Exams</h2>
-  
-    {% if exams %}
-      <ul>
         {% for exam in exams %}
-          <li>
+        <li>
             <strong>{{ exam.name }}</strong> ({{ exam.type }})<br>
             Subject: {{ exam.subject }}<br>
             Revision Notes:
             {% if exam.revision.strip() %}
-              {{ exam.revision }}
+                {{ exam.revision }}
             {% else %}
-              <em>No revision provided</em>
+                <em>No revision provided</em>
             {% endif %}
             <br>
             Room: {{ exam.room }}<br>
             {% if exam.date %}
-              Date: {{ exam.date.strftime('%Y-%m-%d') }} <br>
+                Date: {{ exam.date.strftime('%Y-%m-%d') }} <br>
             {% else %}
-              Date: <em>Not set</em> <br>
+                Date: <em>Not set</em> <br>
             {% endif %}
-  
+
             <form action="/home/exams/delete/{{ exam.id }}" method="POST" style="margin-top: 5px;">
-              <button type="submit">Delete</button>
+                <button type="submit">Delete</button>
             </form>
-            <a href="{{ url_for('edit_exam', exam_id=exam.id) }}">
-              <button type="button">Edit</button>
-            </a>
-          </li>
-          <hr>
+        </li>
+        <hr>
         {% endfor %}
-      </ul>
-    {% else %}
-      <p>No exams yet. Go create one!</p>
-    {% endif %}
-  
-    <nav>
-      <a href="/home"><button>Back Home</button></a>
-      <a href="/home/create/exam"><button>Create Exam</button></a>
-    </nav>
-  
-  {% endif %}
+    </ul>
+{% else %}
+    <p>No exams yet. Go create one!</p>
+{% endif %}
+
+<nav>
+    <a href="/home"><button>Back Home</button></a>
+    <a href="/home/create/exam"><button>Create Exam</button></a>
+</nav>

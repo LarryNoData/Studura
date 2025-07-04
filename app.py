@@ -15,6 +15,7 @@ from calendar import monthrange
 
 
 
+print("Detected Tables:", db.metadata.tables.keys())
 
 print("App loaded and Flask-Migrate initialized.")
 
