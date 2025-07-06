@@ -1,7 +1,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-  </head>
-  
+</head>
+<body>  
   {% if single_task %}
     <h2>Task Details</h2>
   
@@ -30,9 +30,14 @@
   
         <div class="task__actions">
           {% if not single_task.completed_at %}
-            <form action="/home/tasks/complete/{{ single_task.id }}" method="POST">
+            <form action="{{ url_for('complete_task', task_id=single_task.id) }}" method="POST">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <input type="hidden" name="origin" value="{{ origin }}">
               <button type="submit" class="task__actions">Finished</button>
             </form>
+          
+          
+          
           {% else %}
             <span class="task__badge task__actions">Completed</span>
           {% endif %}
@@ -50,6 +55,7 @@
     </ul>
   
     <nav>
+            {% set origin = request.args.get('origin') or origin %}
             {% if origin == 'month' %}
               <a href="{{ url_for('calendar_month') }}"><button>Back to Monthly Calendar</button></a>
             {% elif origin == 'week' %}
@@ -119,3 +125,4 @@
     </nav>
   
   {% endif %}
+</body>

@@ -28,19 +28,21 @@
         </nav>
     </div>
 
+    <input type="checkbox" id="menu-toggle" />
+    <label for="menu-toggle" class="menu-icon">☰ Menu</label>
+
     <div class="sidebar">
-        <nav class = "sidebarcontent">
-          <ul class = "sidebarcontent">
-            <li class = "sidebarcontent"><a href="/home"><button>Home</button></a></li>
-            <li class = "sidebarcontent"><a href="/home/tasks"><button>Tasks</button></a></li>
-            <li class = "sidebarcontent"><a href="/home/exams"><button>Exams</button></a></li>
+          <ul class = "sidebarcontentul">
+            <li class = "sidebarcontentli"><a href="/home"><button class = "sidebarbutton">Home</button></a></li>
+            <li class = "sidebarcontentli"><a href="/home/tasks"><button class = "sidebarbutton">Tasks</button></a></li>
+            <li class = "sidebarcontentli"><a href="/home/exams"><button class = "sidebarbutton">Exams</button></a></li>
             {% if current_user.is_authenticated %}
-                <li class = "sidebarcontent"><a href="/home/profile"><button>Profile</button></a></li>
+                <li class = "sidebarcontentli"><a href="/home/profile"><button class = "sidebarbutton">Profile</button></a></li>
             {% else %}
-                <li class = "sidebarcontent"><a href="/login"><button>Login</button></a></li>
+                <li class = "sidebarcontentli"><a href="/login"><button class = "sidebarbutton">Login</button></a></li>
             {% endif %}
-            <li class = "sidebarcontent"><a href="/home/calendar/month"><button>Calendar</button></a></li>
-            <li class = "sidebarcontent"><a href="/logout"><button>Logout</button></a></li>
+            <li class = "sidebarcontentli"><a href="/home/calendar/month"><button class = "sidebarbutton">Calendar</button></a></li>
+            <li class = "sidebarcontentli"><a href="/logout"><button class = "sidebarbutton">Logout</button></a></li>
           </ul>
         </nav>
     </div>
@@ -56,6 +58,29 @@
         </div>
     {% endif %}
 
+    {% if tasks_due_today %}
+    <div class="today-tasks">
+      <h3>Tasks Due Today</h3>
+      <ul>
+        {% for task in tasks_due_today %}
+          <li><strong>{{ task.name }}</strong> <span class="task__type">({{ task.type }})</span><br>{{ task.subject }}<br> {% if task.describe.strip() %} <em>Description:</em> {{ task.describe }} {% else %}<em>No Description</em>{% endif %}</em></li>
+        {% endfor %}
+      </ul>
+    </div>
 
+  {% else %}
+    <p>No tasks due today 🎉</p>
+  {% endif %}
+
+  {% if overdue_tasks %}
+  <div class="today-overdue-tasks">
+    <h3>Tasks Overdue</h3>
+    <ul>
+        {% for task in overdue_tasks %}
+        <li><strong>{{ task.name }}</strong> <span class="task__type">({{ task.type }})</span><br>{{ task.subject }}<br> {% if task.describe.strip() %} <em>Description:</em> {{ task.describe }} {% else %}<em>No Description</em>{% endif %}</em></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {%endif%}
 </body>
 </html>

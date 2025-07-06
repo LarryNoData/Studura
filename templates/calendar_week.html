@@ -1,7 +1,6 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Weekly Calendar Studura</title>
+    <title>Weekly Calendar</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -47,7 +46,7 @@
         {% endif %}
 
         {% if not day.exams and not day.tasks %}
-          <div class="task-badge empty">No items</div>
+          <div class="task-badge_empty">No items</div>
         {% endif %}
       </div>
     {% endfor %}

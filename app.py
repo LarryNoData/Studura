@@ -80,7 +80,24 @@ def contact():
 def home():
     user_tasks = Task.query.filter_by(user_id=current_user.id).all()
     insights = generate_study_insights(user_tasks)
-    return render_template('home.html',insights=insights)
+    today = datetime.today().date()
+
+    tasks_due_today = Task.query.filter(
+        Task.user_id == current_user.id,
+        db.func.date(Task.due_date) == today,
+        Task.completed_at == None
+    ).all()
+    
+    overdue_tasks = Task.query.filter(
+    Task.user_id == current_user.id,
+    Task.due_date != None,
+    db.func.date(Task.due_date) < today,
+    Task.completed_at == None
+    ).all()
+
+
+
+    return render_template('home.html',insights=insights,tasks_due_today=tasks_due_today,overdue_tasks=overdue_tasks)
 
 @app.route('/home/tasks')
 @login_required
@@ -162,9 +179,35 @@ def complete_task(task_id):
         flash("You can't complete someone else's task.")
         return redirect('/home/tasks')
     
+    #origin = request.form.get('origin')
     task.completed_at = datetime.now(timezone.utc)
     db.session.commit()
-    return redirect('/home/tasks')
+
+    #redirect_map = {
+    #"/home/calendar/week": "/home/calendar/week",
+    #"/home/calendar/month": "/home/calendar/month",
+    #"/home/tasks": "/home/tasks/view"
+    #}
+
+    #if origin not in redirect_map:
+         #Show an error message, log it, or just return a default page
+    #    return "Unknown origin", 400
+
+    #return redirect(f"{redirect_map[origin]}?origin={origin}")
+    next_page = request.form.get('next')
+    origin = request.form.get('origin')
+
+    # Redirect with origin info preserved
+    if next_page:
+        if origin:
+            return redirect(f"{next_page}?origin={origin}")
+        return redirect(next_page)
+    return redirect(url_for('tasks'))
+
+
+    #return redirect('/home/tasks')
+
+
 
 
 

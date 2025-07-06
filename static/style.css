@@ -198,3 +198,76 @@ nav {
     margin-top: 0.3em;
     font-size: 0.9em;
 }
+
+
+/* Hide the checkbox */
+#menu-toggle {
+  display: none;
+}
+
+/* Menu icon */
+.menu-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background-color: #1565c0;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 4px;
+  z-index: 1001;
+}
+
+/* Sidebar container */
+.sidebar {
+  border-radius: 10px;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  transform: translateX(-110%);
+  z-index: 1000;
+  box-shadow: 0 0 10px 5px #0d00ff;
+}
+
+/* Slide in when toggled */
+#menu-toggle:checked ~ .sidebar {
+  transform: translateX(0);
+}
+
+/* Sidebar content */
+.sidebarcontent {
+  background-color: #0d47a1;
+  color: white;
+  height: 100%;
+  padding-top: 60px;
+}
+
+.sidebarcontentul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebarcontentli {
+  margin: 10px 0;
+}
+
+.sidebarbutton {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sidebarbutton:hover {
+  background-color: #2196f3;
+}
