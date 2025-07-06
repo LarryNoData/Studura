@@ -279,7 +279,7 @@ def edit_exam(exam_id):
         exam.date = datetime.strptime(request.form['date'], '%Y-%m-%d') if request.form['date'] else None
 
         db.session.commit()
-        return redirect(url_for('view_exams', exam_id=exam.id, origin='week'))
+        return redirect(url_for('view_exams', exam_id=exam.id,)) #origin='week'))
 
     return render_template('edit_exam.html', exam=exam)
 
