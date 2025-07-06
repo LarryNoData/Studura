@@ -145,7 +145,7 @@ def edit_task(task_id):
 
     if request.method == 'POST':
         task.name = request.form['name']
-        task.type = request.form['type']
+        task.type = request.form.get('type') or 'Other'  # fallback if box is unchecked
         task.subject = request.form['subject']
         task.describe = request.form['describe']
         date_input = request.form['due_date']
@@ -247,9 +247,10 @@ def create_exam():
 
 @app.route('/home/exams')
 @login_required
-def view_exams():
+def view_exam():
     user_exams = Exam.query.filter_by(owner=current_user).all()
-    return render_template('exams.html', exams=user_exams)
+    origin = request.args.get('origin')
+    return render_template('exams.html', exams=user_exams,origin=origin)
 
 
 @app.route('/home/exams/delete/<int:exam_id>', methods=['POST'])
@@ -272,14 +273,15 @@ def edit_exam(exam_id):
 
     if request.method == 'POST':
         exam.name = request.form['name']
-        exam.type = request.form['type']
+        #exam.type = request.form['type']
+        exam.type = request.form.get('type') or 'Other'  # fallback if box is unselected
         exam.subject = request.form['subject']
         exam.revision = request.form['revision']
         exam.room = request.form['room']
         exam.date = datetime.strptime(request.form['date'], '%Y-%m-%d') if request.form['date'] else None
 
         db.session.commit()
-        return redirect(url_for('view_exams', exam_id=exam.id,)) #origin='week'))
+        return redirect(url_for('view_exam', origin='week'))
 
     return render_template('edit_exam.html', exam=exam)
 
