@@ -207,6 +207,12 @@ def complete_task(task_id):
 
     #return redirect('/home/tasks')
 
+@app.route('/home/tasks/uncomplete/<int:task_id>', methods=['POST'])
+def uncomplete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    task.completed_at = None
+    db.session.commit()
+    return redirect(url_for('tasks'))
 
 
 
@@ -376,7 +382,13 @@ def calendar_month():
     display_date = datetime(year, month, 1)
 
     # Query data
-    tasks = Task.query.filter_by(owner=current_user).all()
+    
+    tasks = Task.query.filter(
+        Task.owner == current_user,
+        Task.completed_at.is_(None)
+    ).all()
+
+
     exams = Exam.query.filter_by(owner=current_user).all()
     calendar_days = generate_month_data(year, month, tasks, exams)
 

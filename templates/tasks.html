@@ -1,17 +1,17 @@
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>  
+<body>
   {% if single_task %}
     <h2>Task Details</h2>
-  
+
     <ul>
       <li class="task {% if single_task.completed_at %}task--completed{% endif %}">
         <div class="task__header">
           <strong>{{ single_task.name }}</strong>
           <span class="task__type">({{ single_task.type }})</span>
         </div>
-  
+
         <div class="task__body">
           Subject: {{ single_task.subject }}<br>
           {% if single_task.due_date %}
@@ -19,7 +19,7 @@
           {% else %}
             Due Date: <em>Not set</em> <br>
           {% endif %}
-  
+
           Description:
           {% if single_task.describe.strip() %}
             {{ single_task.describe }}
@@ -27,7 +27,7 @@
             <em>No Description</em>
           {% endif %}
         </div>
-  
+
         <div class="task__actions">
           {% if not single_task.completed_at %}
             <form action="{{ url_for('complete_task', task_id=single_task.id) }}" method="POST">
@@ -35,17 +35,18 @@
               <input type="hidden" name="origin" value="{{ origin }}">
               <button type="submit" class="task__actions">Finished</button>
             </form>
-          
-          
-          
           {% else %}
-            <span class="task__badge task__actions">Completed</span>
+            <form action="{{ url_for('uncomplete_task', task_id=single_task.id) }}" method="POST">
+              <input type="hidden" name="next" value="{{ request.path }}">
+              <input type="hidden" name="origin" value="{{ origin }}">
+              <button type="submit" class="task__actions">Undo Complete</button>
+            </form>
           {% endif %}
-  
+
           <form action="/home/tasks/delete/{{ single_task.id }}" method="POST">
             <button type="submit">Delete</button>
           </form>
-  
+
           <a href="{{ url_for('edit_task', task_id=single_task.id) }}">
             <button type="button">Edit</button>
           </a>
@@ -53,22 +54,21 @@
       </li>
       <hr>
     </ul>
-  
+
     <nav>
-            {% set origin = request.args.get('origin') or origin %}
-            {% if origin == 'month' %}
-              <a href="{{ url_for('calendar_month') }}"><button>Back to Monthly Calendar</button></a>
-            {% elif origin == 'week' %}
-              <a href="{{ url_for('calendar_week') }}"><button>Back to Weekly Calendar</button></a>
-            {% endif %}
-            <a href="/home"><button>Back Home</button></a>
+      {% set origin = request.args.get('origin') or origin %}
+      {% if origin == 'month' %}
+        <a href="{{ url_for('calendar_month') }}"><button>Back to Monthly Calendar</button></a>
+      {% elif origin == 'week' %}
+        <a href="{{ url_for('calendar_week') }}"><button>Back to Weekly Calendar</button></a>
+      {% endif %}
+      <a href="/home"><button>Back Home</button></a>
     </nav>
-          
-  
+
   {% else %}
-  
+
     <h2>All Tasks</h2>
-  
+
     {% if tasks %}
       <ul>
         {% for task in tasks %}
@@ -77,7 +77,7 @@
               <strong>{{ task.name }}</strong>
               <span class="task__type">({{ task.type }})</span>
             </div>
-  
+
             <div class="task__body">
               Subject: {{ task.subject }}<br>
               {% if task.due_date %}
@@ -85,7 +85,7 @@
               {% else %}
                 Due Date: <em>Not set</em> <br>
               {% endif %}
-  
+
               Description:
               {% if task.describe.strip() %}
                 {{ task.describe }}
@@ -93,20 +93,26 @@
                 <em>No Description</em>
               {% endif %}
             </div>
-  
+
             <div class="task__actions">
               {% if not task.completed_at %}
-                <form action="/home/tasks/complete/{{ task.id }}" method="POST">
+                <form action="{{ url_for('complete_task', task_id=task.id) }}" method="POST">
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <input type="hidden" name="origin" value="{{ origin }}">
                   <button type="submit" class="task__actions">Finished</button>
                 </form>
               {% else %}
-                <span class="task__badge task__actions">Completed</span>
+                <form action="{{ url_for('uncomplete_task', task_id=task.id) }}" method="POST">
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <input type="hidden" name="origin" value="{{ origin }}">
+                  <button type="submit" class="task__actions">Undo Complete</button>
+                </form>
               {% endif %}
-  
+
               <form action="/home/tasks/delete/{{ task.id }}" method="POST">
                 <button type="submit">Delete</button>
               </form>
-  
+
               <a href="{{ url_for('edit_task', task_id=task.id) }}">
                 <button type="button">Edit</button>
               </a>
@@ -118,11 +124,11 @@
     {% else %}
       <p>No tasks yet. Go create one!</p>
     {% endif %}
-  
+
     <nav>
       <a href="/home"><button>Back Home</button></a>
       <a href="{{ url_for('create_task') }}"><button>Create Task</button></a>
     </nav>
-  
+
   {% endif %}
 </body>
