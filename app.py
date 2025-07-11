@@ -95,15 +95,23 @@ def home():
     Task.completed_at == None
     ).all()
 
+    total_tasks = Task.query.filter_by(owner=current_user).count()
+    completed_tasks = Task.query.filter_by(owner=current_user).filter(Task.completed_at.isnot(None)).count()
+
+    completion_rate = (completed_tasks / total_tasks * 100) if total_tasks else 0
 
 
-    return render_template('home.html',insights=insights,tasks_due_today=tasks_due_today,overdue_tasks=overdue_tasks)
+    return render_template('home.html',insights=insights,tasks_due_today=tasks_due_today,overdue_tasks=overdue_tasks,completion_rate=completion_rate)
 
 @app.route('/home/tasks')
 @login_required
 def tasks():
     user_tasks = Task.query.filter_by(owner=current_user).all()
-    return render_template('tasks.html', tasks=user_tasks)
+    total_tasks = Task.query.filter_by(owner=current_user).count()
+    completed_tasks = Task.query.filter_by(owner=current_user).filter(Task.completed_at.isnot(None)).count()
+
+    completion_rate = (completed_tasks / total_tasks * 100) if total_tasks else 0
+    return render_template('tasks.html', tasks=user_tasks, completion_rate=completion_rate)
 
 @app.route('/home/tasks/create', methods=['GET', 'POST'])
 @login_required
@@ -440,6 +448,8 @@ def view_exam_from_calendar(exam_id):
     exam = Exam.query.get_or_404(exam_id)
     origin = request.args.get('origin')
     return render_template('exams.html', single_exam=exam, origin=origin)
+
+
 
 
 

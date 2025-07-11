@@ -1,7 +1,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body> 
   {% if single_task %}
     <h2>Task Details</h2>
 
@@ -70,6 +70,16 @@
     <h2>All Tasks</h2>
 
     {% if tasks %}
+      <div class="progress-ring" style="--percent: {{ completion_rate | round(0) }};">
+        <svg class="progress-ring__svg" width="120" height="120">
+          <circle class="progress-ring__circle" stroke="red" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"/>
+          <circle class="progress-ring__circle--value" stroke="darkgreen" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"
+            style="stroke-dasharray: 314; stroke-dashoffset: {{ 314 - (completion_rate / 100 * 314) }}">
+          </circle>
+        </svg>
+        <div class="progress-ring__text">{{ completion_rate | round(0) }}%</div>
+      </div> 
+      
       <ul>
         {% for task in tasks %}
           <li class="task {% if task.completed_at %}task--completed{% endif %}">

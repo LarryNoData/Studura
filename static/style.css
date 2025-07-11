@@ -271,3 +271,24 @@ nav {
 .sidebarbutton:hover {
   background-color: #2196f3;
 }
+
+.progress-ring {
+  position: relative;
+  margin-left: 45%;
+  width: 120px;
+  height: 120px;
+}
+.progress-ring__svg {
+  transform: rotate(-90deg);
+}
+.progress-ring__circle--value {
+  transition: stroke-dashoffset 0.6s ease;
+}
+.progress-ring__text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 1.2em;
+}

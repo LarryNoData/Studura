@@ -13,6 +13,18 @@
         {% if current_user.is_authenticated %}
             <h2 style="margin-top: 10px;">Welcome back, {{ current_user.username }}!</h2>
         {% endif %}
+
+
+        <div class="progress-ring" style="--percent: {{ completion_rate | round(0) }};">
+            <svg class="progress-ring__svg" width="120" height="120">
+              <circle class="progress-ring__circle" stroke="red" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"/>
+              <circle class="progress-ring__circle--value" stroke="darkgreen" stroke-width="10" fill="transparent" r="50" cx="60" cy="60"
+                style="stroke-dasharray: 314; stroke-dashoffset: {{ 314 - (completion_rate / 100 * 314) }}">
+              </circle>
+            </svg>
+            <div class="progress-ring__text">{{ completion_rate | round(0) }}%</div>
+        </div> 
+          
     </div>
         <nav>
             <a href="/home"><button>Home</button></a>
