@@ -12,11 +12,11 @@ set -e  # Exit immediately if any command fails
 #fi
 
 # Run migration and capture errors
-if ! python python manage.py db stamp f6e5d4c3b2a1; then
-    echo "DB stamp failed"
+if ! python manage.py db upgrade; then
+    echo "DB upgrade failed"
     exit 1
 else
-    echo "Database stamped successfully to f6e5d4c3b2a1"
+    echo "Database upgraded succesfully"
 fi
 
 # Start the Gunicorn server
