@@ -12,7 +12,7 @@ set -e  # Exit immediately if any command fails
 #fi
 
 # Run migration and capture errors
-if ! python flask db stamp f6e5d4c3b2a1; then
+if ! python python manage.py db stamp f6e5d4c3b2a1; then
     echo "DB stamp failed"
     exit 1
 else
