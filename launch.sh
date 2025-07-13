@@ -12,11 +12,11 @@ set -e  # Exit immediately if any command fails
 #fi
 
 # Run migration and capture errors
-if ! python manage.py db stamp f6e5d4c3b2a1; then
+if ! python flask db stamp f6e5d4c3b2a1; then
     echo "DB stamp failed"
     exit 1
 else
-    echo "Database stamped successfully"
+    echo "Database stamped successfully to f6e5d4c3b2a1"
 fi
 
 # Start the Gunicorn server
