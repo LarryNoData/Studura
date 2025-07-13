@@ -2,7 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user, UserMixin
 from flask import Flask, request, redirect, url_for, render_template, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User, Task, Exam
+from models import db, User, Task, Exam, Subject
 import os
 from dotenv import load_dotenv
 from flask_migrate import Migrate
@@ -449,6 +449,12 @@ def view_exam_from_calendar(exam_id):
     origin = request.args.get('origin')
     return render_template('exams.html', single_exam=exam, origin=origin)
 
+
+@app.route('/home/subjects')
+def subjects():
+    user_subjects = Subject.query.filter_by(owner=current_user).all()
+    origin = request.args.get('origin')
+    return render_template('subjects.html', exams=user_subjects,origin=origin)
 
 
 

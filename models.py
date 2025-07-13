@@ -18,6 +18,7 @@ class User(UserMixin, db.Model):
 
     tasks = db.relationship('Task', backref='owner', lazy=True)
     exams = db.relationship('Exam', backref='owner', lazy=True)
+    subjects = db.relationship('Subject', backref='owner',lazy=True)
 
 class Task(db.Model):
     __tablename__ = 'task'
@@ -47,6 +48,24 @@ class Exam(db.Model):
     completed_at_exam = db.Column(db.DateTime, nullable=True)
 
 
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    owner_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id', use_alter=True, name='fk_exam_owner'),
+        nullable=False
+    )
 
 
+
+class Subject(db.Model):
+    __tablename__ = 'Subject'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    subject = db.Column(db.String(100), nullable=True)
+    room = db.Column(db.String(50), nullable=True)
+    grade = db.Column(db.String(100), nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+
+
+    subject_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
