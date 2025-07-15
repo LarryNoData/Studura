@@ -66,6 +66,8 @@ class Subject(db.Model):
     room = db.Column(db.String(50), nullable=True)
     grade = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.Text, nullable=True)
+    debug_column = db.Column(db.String(5))
+
 
 
     subject_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
