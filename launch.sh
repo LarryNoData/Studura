@@ -3,20 +3,9 @@ echo "Starting Studura at $(date)"
 
 set -e  # Exit immediately if any command fails
 
-# Run migration and capture errors
-#if flask db upgrade; then
-    #echo "Migration complete"
-#else
-    #echo "Migration failed"
-    #exit 1
-#fi
 
-if ! python manage.py db stamp 0c14b2722228; then
-    echo "DB stamp failed"
-    exit 1
-else
-    echo "Database stamped succesfully"
-fi
+python manage.py db stamp 3f9c2a1b7e4a
+
 
 # Run migration and capture errors
 if ! python manage.py db upgrade; then
