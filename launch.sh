@@ -11,7 +11,7 @@ set -e  # Exit immediately if any command fails
     #exit 1
 #fi
 
-if ! python python manage.py db stamp 0c14b2722228; then
+if ! python manage.py db stamp 0c14b2722228; then
     echo "DB stamp failed"
     exit 1
 else
