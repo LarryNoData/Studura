@@ -32,6 +32,9 @@ class Task(db.Model):
     #New columns for insights
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     completed_at = db.Column(db.DateTime, nullable=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey('subject.id'), nullable=True)
+    subject = db.relationship('Subject', backref='tasks')
+
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Exam(db.Model):
@@ -57,17 +60,15 @@ class Exam(db.Model):
 
 
 class Subject(db.Model):
-    __tablename__ = 'Subject'
+    __tablename__ = 'subject'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     type = db.Column(db.String(50), nullable=False)
-    subject = db.Column(db.String(100), nullable=True)
     room = db.Column(db.String(50), nullable=True)
     grade = db.Column(db.String(100), nullable=False)
     notes = db.Column(db.Text, nullable=True)
-    debug_column = db.Column(db.String(5))
-
+    color = db.Column(db.String(7))
 
 
     subject_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

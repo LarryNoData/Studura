@@ -1,0 +1,37 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <form action="{{ url_for('create_subject', origin=origin) }}" method="POST" class = "create">
+        <label for="subject">Subject Name:</label>
+        <input type="text" id="subject" name="subject" required><br><br>
+
+        <label for="type">Normal</label>
+        <input type="checkbox" id="type" name="type"><br><br>
+
+        <label for="notes">Notes:</label>
+        <textarea id="notes" name="notes"></textarea><br><br>
+
+        <label for="room">Room?</label>
+        <input type="text" id="room" name="room" required><br><br>
+
+        <label for="grade">What Grade?</label>
+        <input type="text" id="grade" name="grade" required><br><br>
+
+        <label for="color">Subject Colour:</label>
+        <input type="color" id="color" name="color" value="#2196f3"><br><br>
+
+        <input type="hidden" name="origin" value="{{ origin }}">
+
+        <input type="submit" value="Submit" class = 'login'>
+    </form>
+
+    <a href="/home/subjects">
+        <button type="button">Back To Subjects</button>
+    </a>
+    {% if return_to_create %}
+        <a href="{{ url_for('create_task') }}" class="btn btn-light"><button>Return To Create Task</button></a>
+    {% endif %}
+
+</body>

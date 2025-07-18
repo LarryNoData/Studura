@@ -30,9 +30,11 @@
           {% if day.exams %}
             <p><em>Exams:</em></p>
             {% for exam in day.exams %}
-                <a href="{{ url_for('view_exam_from_calendar', exam_id=exam.id, origin='month') }}">
-                    <div class="exam-badge">{{ exam.subject }}{% if exam.title %} – {{ exam.title }}{% endif %}</div>
-                </a>
+              <a href="{{ url_for('view_task', task_id=task.id, origin='week') }}">
+               <div class="task-badge" style="background-color: {{ task.subject.color or '#888' }}; color: white;">
+                {{ task.name }}
+               </div>
+              </a>
               
             {% endfor %}
           {% endif %}

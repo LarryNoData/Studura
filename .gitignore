@@ -17,3 +17,5 @@ __pycache__/
 
 # Alembic caches
 migrations/versions/__pycache__/
+
+pico_health.py

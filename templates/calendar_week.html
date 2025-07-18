@@ -28,9 +28,9 @@
         {% if day.exams %}
           <p><em>Exams:</em></p>
           {% for exam in day.exams %}
-            <a href="{{ url_for('view_exam_from_calendar', exam_id=exam.id, origin='week') }}">
-                <div class="exam-badge">{{ exam.subject }}{% if exam.title %} – {{ exam.title }}{% endif %}</div>
-            </a>          
+            <a href="{{ url_for('view_exam_from_calendar', exam_id=exam.id, origin='month') }}">
+              <div class="exam-badge">{{ exam.subject }}{% if exam.title %} – {{ exam.title }}{% endif %}</div>
+            </a>        
           
           {% endfor %}
         {% endif %}
@@ -38,11 +38,16 @@
         {% if day.tasks %}
           <p><em>Tasks:</em></p>
           {% for task in day.tasks %}
-            <a href="{{ url_for('view_task', task_id=task.id, origin='week') }}">
-                <div class="task-badge">{{ task.name }}</div>
-            </a>
-          
+            {% if not task.completed_at %}
+              <a href="{{ url_for('view_task', task_id=task.id, origin='week') }}">
+                <div class="task-badge" style="background-color: {{ task.subject.color or '#888' }}; color: white;">
+                 {{ task.name }}
+                </div>
+              </a>
+            
+            {% endif %}
           {% endfor %}
+
         {% endif %}
 
         {% if not day.exams and not day.tasks %}

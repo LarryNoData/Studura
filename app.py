@@ -103,15 +103,37 @@ def home():
 
     return render_template('home.html',insights=insights,tasks_due_today=tasks_due_today,overdue_tasks=overdue_tasks,completion_rate=completion_rate)
 
+
 @app.route('/home/tasks')
 @login_required
 def tasks():
+    subjects = Subject.query.filter_by(subject_user_id=current_user.id).all()
     user_tasks = Task.query.filter_by(owner=current_user).all()
-    total_tasks = Task.query.filter_by(owner=current_user).count()
-    completed_tasks = Task.query.filter_by(owner=current_user).filter(Task.completed_at.isnot(None)).count()
+    #total_tasks = Task.query.filter_by(owner=current_user).count()
+    #completed_tasks = Task.query.filter_by(owner=current_user).filter(Task.completed_at.isnot(None)).count()
+    subject_id = request.args.get('subject_id', type=int)
+    subjects = Subject.query.filter_by(subject_user_id=current_user.id).all()
+
+    if subject_id:
+        tasks = Task.query.filter_by(user_id=current_user.id, subject_id=subject_id).all()
+    else:
+        tasks = Task.query.filter_by(user_id=current_user.id).all()
+
+
+    total_tasks = len(tasks)
+    completed_tasks = len([t for t in tasks if t.completed_at])
+    completion_rate = (completed_tasks / total_tasks * 100) if total_tasks else 0
+
 
     completion_rate = (completed_tasks / total_tasks * 100) if total_tasks else 0
-    return render_template('tasks.html', tasks=user_tasks, completion_rate=completion_rate)
+    return render_template(
+        'tasks.html',
+        tasks=tasks,  # ✅ This is the filtered list
+        completion_rate=completion_rate,
+        subject_id=subject_id,
+        subjects=subjects
+    )
+
 
 @app.route('/home/tasks/create', methods=['GET', 'POST'])
 @login_required
@@ -119,15 +141,16 @@ def create_task():
     if request.method == 'POST':
         name = request.form.get('name')
         task_type = 'Normal' if 'type' in request.form else 'Other'
-        subject = request.form.get('subject')
         describe = request.form.get('describe')
+        subjects = Subject.query.filter_by(subject_user_id=current_user.id).all()
+        subject_id = request.form.get('subject_id')
 
         new_task = Task(
             name=name,
             type=task_type,
-            subject=subject,
             describe=describe,
-            owner=current_user
+            owner=current_user,
+            subject_id=subject_id if subject_id else None,
         )
 
 
@@ -137,11 +160,12 @@ def create_task():
                                      
         db.session.add(new_task)
         db.session.commit()
-
+        origin = request.args.get('origin')
         return redirect('/home/tasks')
 
     origin = request.args.get('origin')
-    return render_template('create.html',show_return_home=(origin == 'home'))
+    subjects = Subject.query.filter_by(subject_user_id=current_user.id).all()
+    return render_template('create.html',show_return_home=(origin == 'home'), subjects=subjects)
 
 @app.route('/task/edit/<int:task_id>', methods=['GET', 'POST'])
 @login_required
@@ -421,7 +445,10 @@ def calendar_week():
     prev_date = ref_date - timedelta(days=7)
     next_date = ref_date + timedelta(days=7)
 
-    tasks = Task.query.filter_by(owner=current_user).all()
+    tasks = Task.query.filter(
+        Task.owner == current_user,
+        Task.completed_at.is_(None)
+    ).all()
     exams = Exam.query.filter_by(owner=current_user).all()
     week_days = generate_week_data(ref_date, tasks, exams)
 
@@ -451,12 +478,82 @@ def view_exam_from_calendar(exam_id):
 
 
 @app.route('/home/subjects')
+@login_required
 def subjects():
-    user_subjects = Subject.query.filter_by(owner=current_user).all()
+    user_subjects = Subject.query.filter_by(subject_user_id=current_user.id).all()
     origin = request.args.get('origin')
-    return render_template('subjects.html', exams=user_subjects,origin=origin)
+    return render_template('subjects.html', subjects=user_subjects,origin=origin)
 
 
+@app.route('/home/subjects/create', methods=['GET', 'POST'])
+@login_required
+def create_subject():
+    origin = request.args.get('origin')
+
+    if request.method == 'POST':
+
+        origin = request.form.get('origin') or request.args.get('origin')
+        name = request.form.get('subject')
+        type = 'Normal' if 'type' in request.form else 'Other'
+        notes = request.form.get('notes')
+        room = request.form.get('room')
+        grade = request.form.get('grade')
+        colour = request.form.get('color')
+
+        new_subject = Subject(
+            name=name,
+            type=type,
+            notes=notes,
+            grade=grade,
+            room=room,
+            color=colour,
+            subject_user_id=current_user.id
+        )
+        
+        db.session.add(new_subject)
+        db.session.commit()
+        print(f'origin origin')
+        if origin == 'task':
+            return redirect(url_for('create_task'))
+        return redirect('/home/subjects')
+    origin = request.args.get('origin')
+    return render_template('create_subject.html', origin=origin,return_to_create=(origin == 'task'))
+
+
+
+
+@app.route('/home/subjects/delete/<int:subject_id>', methods=['POST'])
+@login_required
+def delete_subject(subject_id):
+    subject = Subject.query.get_or_404(subject_id)
+
+    if subject.subject_user_id != current_user.id:
+        flash("You can't delete someone else's subject.", "error")
+        return redirect(url_for('subjects'))
+
+    db.session.delete(subject)
+    db.session.commit()
+    return redirect(url_for('subjects'))
+
+@app.route('/home/subjects/edit/<int:subject_id>', methods=['GET', 'POST'])
+@login_required
+def edit_subject(subject_id):
+    subject = Subject.query.get_or_404(subject_id)
+
+    if subject.subject_user_id != current_user.id:
+        flash("Unauthorized access to subject.", "error")
+        return redirect(url_for('subjects'))
+
+    if request.method == 'POST':
+        subject.name = request.form['name']
+        subject.type = request.form.get('type') or 'Other'
+        subject.notes = request.form['notes']
+        subject.room = request.form['room']
+        subject.grade = request.form['grade'] if request.form['grade'] else None
+
+        db.session.commit()
+        return redirect(url_for('subjects'))
+    return render_template('edit_subject.html', subject=subject)
 
 
 

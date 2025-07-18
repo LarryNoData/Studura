@@ -3,11 +3,7 @@ echo "Starting Studura at $(date -u)"
 
 set -e  # Exit immediately if any command fails
 
-# Stamp the database to the latest migration revision
-until python manage.py db stamp head; do
-    echo "Waiting for DB to be available..."
-    sleep 5
-done
+python manage.py db stamp head
 
 
 # Run migration and capture errors

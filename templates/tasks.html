@@ -13,7 +13,9 @@
         </div>
 
         <div class="task__body">
-          Subject: {{ single_task.subject }}<br>
+          <span style="background-color: {{ single_task.subject.color }}; color: white; padding: 4px 8px; border-radius: 5px;">
+            {{ single_task.subject.name }}
+          </span><br><br>
           {% if single_task.due_date %}
             Due Date: {{ single_task.due_date.strftime('%Y-%m-%d') }} <br>
           {% else %}
@@ -80,16 +82,42 @@
         <div class="progress-ring__text">{{ completion_rate | round(0) }}%</div>
       </div> 
       
+      <form method="GET" action="{{ url_for('tasks') }}">
+        <label for="subject_filter">Filter by Subject:</label>
+        <select name="subject_id" id="subject_filter">
+          <option value="">All Subjects</option>
+          {% for subject in subjects %}
+            <option value="{{ subject.id }}" {% if subject_id == subject.id %}selected{% endif %}>
+              {{ subject.name }}
+            </option>
+          {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+        {% if subject_id %}
+          <a href="{{ url_for('tasks') }}">
+            <button type="button">Clear Filter</button>
+          </a>
+        {% endif %}
+      </form>
+    
+     
+      
+
+      
+
       <ul>
         {% for task in tasks %}
-          <li class="task {% if task.completed_at %}task--completed{% endif %}">
+          <li class="task {% if task.completed_at %}task--completed{% endif %}" style="border-left: 5px solid {{ task.subject.color }}">
             <div class="task__header">
               <strong>{{ task.name }}</strong>
               <span class="task__type">({{ task.type }})</span>
             </div>
 
             <div class="task__body">
-              Subject: {{ task.subject }}<br>
+              <span style="background-color: {{ task.subject.color }}; color: white; padding: 4px 8px; border-radius: 5px;">
+                {{ task.subject.name }}
+              </span><br><br>
+              
               {% if task.due_date %}
                 Due Date: {{ task.due_date.strftime('%Y-%m-%d') }} <br>
               {% else %}

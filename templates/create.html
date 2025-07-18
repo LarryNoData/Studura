@@ -10,15 +10,22 @@
         <label for="type">Normal</label>
         <input type="checkbox" id="type" name="type"><br><br>
 
-        <label for="subject">What Subject?</label>
-        <input type="text" id="subject" name="subject" required><br><br>
-
         <label for="due_date">Due Date:</label>
         <input type="date" id="due_date" name="due_date"><br><br>
 
 
         <label for="describe">Describe the task:</label>
         <textarea id="describe" name="describe"></textarea><br><br>
+
+        <label for="subject">Subject:</label>
+        <select name="subject_id" class = "select_subject_in_task">
+            <option value="">-- Select Subject --</option>
+            {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+            {% endfor %}
+        </select> 
+        <br> <a href="{{ url_for('create_subject', origin='task') }}">Create a new subject</a>
+        <br><br>
 
         <input type="submit" value="Complete" class='login'>
     </form>

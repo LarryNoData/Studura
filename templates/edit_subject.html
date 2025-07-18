@@ -1,0 +1,27 @@
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  
+  <h2>Update Subject</h2>
+  
+  <form method="POST" class="create">
+    Name: <input type="text" name="name" value="{{ subject.name }}"><br>
+  
+    Type: Normal
+    <input type="checkbox" name="type" value="Normal"
+           {% if subject.type == 'Normal' %}checked{% endif %}>
+    <br>
+  
+    Room: <input type="text" name="room" value="{{ subject.room }}"><br>
+  
+    Grade: <input type="text" name="grade" value="{{ subject.grade }}"><br>
+  
+    Notes:
+    <textarea name="notes">{{ subject.notes }}</textarea><br>
+  
+    <button type="submit">Save</button>
+  </form>
+  
+  <nav>
+    <a href="{{ url_for('subjects') }}"><button>Cancel</button></a>
+  </nav>

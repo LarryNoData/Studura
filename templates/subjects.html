@@ -1,11 +1,11 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
-    <h2>All Exams</h2>
+    <h2>All Subjects</h2>
   
-    {% if Subjects %}
+    {% if subjects %}
       <ul>
-        {% for subject in Subjects %}
+        {% for subject in subjects %}
           <li>
             <strong>{{ subject.name }}</strong> ({{ subject.type }})<br>
             Notes:
@@ -18,11 +18,11 @@
             Room: {{ subject.room }}<br>
             Grade: {{subject.grade}}
   
-            <form action="/home/subjects/delete/{{ subject.id }}" method="POST" style="margin-top: 5px;">
+            <form action="{{ url_for('delete_subject', subject_id=subject.id) }}" method="POST">
               <button type="submit">Delete</button>
             </form>
-            <a href="{{ url_for('edit_subject', subject=subject.id)}}?origin=week">
-              <button type="button">Edit</button>
+            <a href="{{ url_for('edit_subject', subject_id=subject.id) }}?origin=week">
+              <button type="button">Update</button>
             </a>
           </li>
           <hr>
@@ -34,5 +34,5 @@
   
     <nav>
       <a href="/home"><button>Back Home</button></a>
-      <a href="/home/create/subject"><button>Create New Subject</button></a>
+      <a href="/home/subjects/create"><button>Create New Subject</button></a>
     </nav>
