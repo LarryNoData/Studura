@@ -3,7 +3,7 @@ echo "Starting Studura at $(date -u)"
 
 set -e  # Exit immediately if any command fails
 
-python manage.py db stamp head
+#python manage.py db stamp head
 
 
 # Run migration and capture errors
