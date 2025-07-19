@@ -1,6 +1,25 @@
 <head>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
+<input type="checkbox" id="menu-toggle" />
+<label for="menu-toggle" class="menu-icon">☰ Menu</label>
+
+<div class="sidebar">
+      <ul class = "sidebarcontentul">
+        <li class = "sidebarcontentli"><a href="/home"><button class = "sidebarbutton">Home</button></a></li>
+        <li class = "sidebarcontentli"><a href="/home/tasks"><button class = "sidebarbutton">Tasks</button></a></li>
+        <li class = "sidebarcontentli"><a href="/home/exams"><button class = "sidebarbutton">Exams</button></a></li>
+        {% if current_user.is_authenticated %}
+            <li class = "sidebarcontentli"><a href="/home/profile"><button class = "sidebarbutton">Profile</button></a></li>
+        {% else %}
+            <li class = "sidebarcontentli"><a href="/login"><button class = "sidebarbutton">Login</button></a></li>
+        {% endif %}
+        <li class = "sidebarcontentli"><a href="/home/calendar/month"><button class = "sidebarbutton">Calendar</button></a></li>
+        <li class = "sidebarcontentli"><a href="/home/subjects"><button class = "sidebarbutton">Subjects</button></a></li>
+        <li class = "sidebarcontentli"><a href="/logout"><button class = "sidebarbutton">Logout</button></a></li>
+      </ul>
+    </nav>
+</div>
     <h2>All Subjects</h2>
   
     {% if subjects %}

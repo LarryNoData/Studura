@@ -200,7 +200,7 @@ nav {
 }
 
 
-/* Hide the checkbox */
+/* Hide checkbox */
 #menu-toggle {
   display: none;
 }
@@ -208,7 +208,7 @@ nav {
 /* Menu icon */
 .menu-icon {
   position: absolute;
-  top: 15px;
+  top: 10px;
   left: 15px;
   background-color: #1565c0;
   color: white;
@@ -278,12 +278,15 @@ nav {
   width: 120px;
   height: 120px;
 }
+
 .progress-ring__svg {
   transform: rotate(-90deg);
 }
+
 .progress-ring__circle--value {
   transition: stroke-dashoffset 0.6s ease;
 }
+
 .progress-ring__text {
   position: absolute;
   top: 50%;
